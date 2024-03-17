@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 class User implements Serializable {
+    /**
+	 * 
+	 */
 	private static final long serialVersionUID = -4933018237570010756L;
 	private String username;
     private String password;
@@ -49,7 +52,7 @@ public class Main {
             System.out.println("3. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
-            scanner.nextLine();  
+            scanner.nextLine();  // Consume newline
 
             switch (choice) {
                 case 1:
@@ -59,7 +62,7 @@ public class Main {
                     signup(scanner);
                     break;
                 case 3:
-                    saveUserData(); 
+                    saveUserData(); // Save user data to file before exiting
                     System.out.println("Exiting...");
                     System.exit(0);
                     break;
@@ -95,13 +98,23 @@ public class Main {
         String password = scanner.nextLine();
         System.out.print("Confirm password: ");
         String confirmPassword = scanner.nextLine();
+        System.out.print("Enter user type (ADMIN or USER): ");
+        String userTypeInput = scanner.nextLine().toUpperCase();
+        
+        UserType userType;
+        try {
+            userType = UserType.valueOf(userTypeInput);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid user type. Please enter either ADMIN or USER.");
+            return;
+        }
 
         if (!password.equals(confirmPassword)) {
             System.out.println("Passwords do not match.");
             return;
         }
 
-        users.put(username, new User(username, password, UserType.USER));
+        users.put(username, new User(username, password, userType));
         System.out.println("Signup successful!");
     }
 
